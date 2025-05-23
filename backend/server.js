@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Conexão PostgreSQL (ex: Supabase/Neon)
+// 🔗 Conexão com PostgreSQL (Supabase, Neon, etc.)
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -20,12 +20,12 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// ✅ Rota raiz para teste
-app.get("/", (req, res) => {
-  res.send("Servidor está funcionando!");
+// ✅ Rota raiz para indicar que o servidor está ativo
+app.get('/', (req, res) => {
+  res.send('Servidor está funcionando!');
 });
 
-// Teste de conexão
+// 🔄 Teste de conexão com o banco
 app.get('/test', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');
@@ -35,7 +35,7 @@ app.get('/test', async (req, res) => {
   }
 });
 
-// Rota de login (POST)
+// 🔐 Login de usuário
 app.post('/login', async (req, res) => {
   const { usuario, senha } = req.body;
   try {
@@ -53,7 +53,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Listar alunos
+// 📄 Listar alunos
 app.get('/alunos', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM alunos');
@@ -63,7 +63,7 @@ app.get('/alunos', async (req, res) => {
   }
 });
 
-// Cadastrar aluno
+// ➕ Cadastrar aluno
 app.post('/alunos', async (req, res) => {
   const {
     nome,
@@ -110,13 +110,13 @@ app.post('/alunos', async (req, res) => {
   }
 });
 
-// Editar aluno
+// ✏️ Editar aluno
 app.put('/alunos/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, idade, sexo } = req.body;
   try {
     await pool.query(
-      'UPDATE alunos SET nome=$1, idade=$2, sexo=$3 WHERE id=$4',
+      'UPDATE alunos SET nome = $1, idade = $2, sexo = $3 WHERE id = $4',
       [nome, idade, sexo, id]
     );
     res.sendStatus(200);
@@ -125,18 +125,18 @@ app.put('/alunos/:id', async (req, res) => {
   }
 });
 
-// Deletar aluno
+// ❌ Deletar aluno
 app.delete('/alunos/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM alunos WHERE id=$1', [id]);
+    await pool.query('DELETE FROM alunos WHERE id = $1', [id]);
     res.sendStatus(200);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
-// Inicializa servidor
+// ▶️ Inicializar servidor
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
