@@ -20,6 +20,11 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
+// ✅ Rota raiz para teste
+app.get("/", (req, res) => {
+  res.send("Servidor está funcionando!");
+});
+
 // Teste de conexão
 app.get('/test', async (req, res) => {
   try {
@@ -105,7 +110,7 @@ app.post('/alunos', async (req, res) => {
   }
 });
 
-// Editar aluno (nome, idade, sexo)
+// Editar aluno
 app.put('/alunos/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, idade, sexo } = req.body;
@@ -135,3 +140,4 @@ app.delete('/alunos/:id', async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
+
